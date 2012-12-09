@@ -90,7 +90,7 @@ function draw_menorah(){
 
   function draw_candle(candle_center_bottom_x, candle_center_bottom_y, flicker_x, flicker_y){
     var candle_width = 25;
-    var candle_burn_constant = 10000
+    var candle_burn_constant = 100000
     var candle_burn_time = Math.floor(candle_burn_constant * _.random(8, 12) / 10);
     var candle_path = "M" + (candle_center_bottom_x) + "," + (candle_center_bottom_y);
     candle_path += "L" + (candle_center_bottom_x) + "," + (candle_center_bottom_y - candle_height);
