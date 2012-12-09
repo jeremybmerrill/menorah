@@ -16,21 +16,33 @@ function draw_menorah(){
   var menorah_top = top_buffer + candle_height; //location of the top of the menorah.
   var menorah_bottom = menorah_height + menorah_top; //location
   var shamash_height = 30;
-  var hanukkah_start_date = moment(new Date(2012, 11, 8, 16, 28, 0, 0)); //8
-  var base_width = 150;
-
+  var hanukkah_start_date_2012 = moment(new Date(2012, 11, 8, 16, 28, 0, 0)); //(2012, 11, 8, 16, 28, 0, 0)
   var now = moment();
 
-  candle_count = Math.abs(hanukkah_start_date.diff(now, "days")) + 1;
+  var base_width = 150;
+
+  candle_count = Math.floor(now.diff(hanukkah_start_date_2012, "minutes") / (24 * 60)) + 1;
+  next_candlelighting_time = hanukkah_start_date_2012.add("days", now.diff(hanukkah_start_date_2012, "days") );
+  if( next_candlelighting_time.diff(now, "seconds") < 0){ //if the closest candlelighting time has already passed.
+    next_candlelighting_time = hanukkah_start_date_2012.add("days", now.diff(hanukkah_start_date_2012, "days") + 1 );
+  }
+
   if(candle_count > 8){
     candle_count = 0;
     console.log("See you next year!");
     window.clearInterval(window.should_i_keep_drawing_the_menorah);
+  }else if(candle_count <= 7){
+    var milliseconds_until_next_candlelighting = next_candlelighting_time.diff(now, "seconds") * 1000;
+    _.delay(draw_menorah, milliseconds_until_next_candlelighting);
+    console.log("If you're still here, I'll light " + (candle_count + 1) + " candles in about " + moment.duration(milliseconds_until_next_candlelighting).humanize());
   }
+
   if(window.override_candle_count){
     candle_count = window.override_candle_count;
   }
   console.log("Candles: " + candle_count)
+
+
 
   var paper = Raphael(menorah_left, drawing_top, menorah_right, menorah_bottom+ 500);
   //var conline1 = paper.path("M100,500L0,250");
@@ -90,7 +102,7 @@ function draw_menorah(){
 
   function draw_candle(candle_center_bottom_x, candle_center_bottom_y, flicker_x, flicker_y){
     var candle_width = 25;
-    var candle_burn_constant = 100000
+    var candle_burn_constant = 100000;
     var candle_burn_time = Math.floor(candle_burn_constant * _.random(8, 12) / 10);
     var candle_path = "M" + (candle_center_bottom_x) + "," + (candle_center_bottom_y);
     candle_path += "L" + (candle_center_bottom_x) + "," + (candle_center_bottom_y - candle_height);
@@ -161,5 +173,6 @@ function draw_menorah(){
     new_flame_path += "z";
     flame.animate({path : new_flame_path }, 1000, "linear" )// flicker(flame, flame_height, flame_width, flame_center_bottom_y, candle_center_bottom_x, candle_center_bottom_y ))
   }
+  return paper;
 }
 });
