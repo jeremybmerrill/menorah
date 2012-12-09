@@ -23,8 +23,8 @@ function draw_menorah(){
 
   candle_count = Math.floor(now.diff(hanukkah_start_date_2012, "minutes") / (24 * 60)) + 1;
   next_candlelighting_time = hanukkah_start_date_2012.add("days", now.diff(hanukkah_start_date_2012, "days") );
-  if( next_candlelighting_time.diff(now, "seconds") < 0){ //if the closest candlelighting time has already passed.
-    next_candlelighting_time = hanukkah_start_date_2012.add("days", now.diff(hanukkah_start_date_2012, "days") + 1 );
+  if( next_candlelighting_time.diff(now, "seconds") < 2){ //if the closest candlelighting time has already passed.
+    next_candlelighting_time = hanukkah_start_date_2012.add("days", now.diff(hanukkah_start_date_2012, "days") + 1 )
   }
 
   if(candle_count > 8){
